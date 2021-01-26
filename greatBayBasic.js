@@ -40,6 +40,9 @@ function start() {
       }
       else {
         // console log all item names to inquirer and 
+        postAuction();
+      }
+      else {
         bidAuction();
       }
     });
@@ -69,3 +72,37 @@ function bidChoice(items) {
     choices: items
   });
 }
+
+function postAuction() {
+  inquirer
+    .prompt([{
+      type: "input",
+      message: "What would you like to post?",
+      name: "itemName"
+    },
+    {
+      type: "input",
+      message: "What category is your item?",
+      name: "category",
+    },
+    {
+      type: "input",
+      message: "What is the starting bid for your item?",
+      name: "starting_bid"
+    }])
+    .then((data) => {
+      var query = connection.query(
+        "INSERT INTO auctions SET ?",
+      {
+        item_name: data.itemName,
+        category: data.category,
+        starting_bid: data.starting_bid
+      },
+      function(err, res) {
+        console.log(query.sql)
+        start();
+      })
+    })
+}
+
+
