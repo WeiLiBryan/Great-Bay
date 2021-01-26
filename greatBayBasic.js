@@ -61,6 +61,19 @@ function postAuction() {
       name: "starting_bid",
       message: "What is the starting bid for your item?"
     })
-    .then
+    .then(function createProduct() {
+      console.log("Adding new item..\n");
+      var query = connection.query(
+        "INSERT INTO auctions SET ?",
+      {
+        item_name: res.item_name,
+        category: res.category,
+        starting_bid: res.starting_bid
+      },
+      function(err, res) {
+        console.log(res.affectedRows + " product added!\n");
+        start();
+      })
+    })
 }
 
