@@ -46,32 +46,31 @@ function start() {
 
 function postAuction() {
   inquirer
-    .prompt({
+    .prompt([{
       type: "input",
-      name: "item_name",
       message: "What would you like to post?",
+      name: "itemName"
     },
     {
       type: "input",
+      message: "What category is your item?",
       name: "category",
-      message: "What category is your item?"
     },
     {
       type: "input",
-      name: "starting_bid",
-      message: "What is the starting bid for your item?"
-    })
-    .then(function createProduct() {
-      console.log("Adding new item..\n");
+      message: "What is the starting bid for your item?",
+      name: "starting_bid"
+    }])
+    .then((data) => {
       var query = connection.query(
         "INSERT INTO auctions SET ?",
       {
-        item_name: res.item_name,
-        category: res.category,
-        starting_bid: res.starting_bid
+        item_name: data.itemName,
+        category: data.category,
+        starting_bid: data.starting_bid
       },
       function(err, res) {
-        console.log(res.affectedRows + " product added!\n");
+        console.log(query.sql)
         start();
       })
     })
