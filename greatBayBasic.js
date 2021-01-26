@@ -35,6 +35,11 @@ function start() {
     .then(function(answer) {
       // based on their answer, either call the bid or the post functions
       if (answer.postOrBid.toUpperCase() === "POST") {
+        // inquirer prompt item submit, name, category, starting bid
+        postAuction();
+      }
+      else {
+        // console log all item names to inquirer and 
         postAuction();
       }
       else {
@@ -43,6 +48,30 @@ function start() {
     });
 }
 
+function bidAuction() {
+  const items = [];
+  connection.query("SELECT item_name FROM auctions", async function(err, res) {
+    if (err) throw err;
+
+    for (let i=0; i<res.length; i++){
+      items.push(res[i].item_name);
+    }
+    
+    let itemChoice = await bidChoice(items);
+    
+    // connection.end();
+  }); 
+}
+
+function bidChoice(items) {
+  // console.log(items);
+  return inquirer.prompt({
+    name: "item",
+    type: "list",
+    message: "Which item would you like to bid on?",
+    choices: items
+  });
+}
 
 function postAuction() {
   inquirer
@@ -75,4 +104,5 @@ function postAuction() {
       })
     })
 }
+
 
